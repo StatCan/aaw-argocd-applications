@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: eck-daaas
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    namespace: daaas-system
+    name: in-cluster
+  source:
+    repoURL: https://github.com/statcan/argocd-manifests
+    path: daaas-system/eck/daaas
+    targetRevision: null
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
