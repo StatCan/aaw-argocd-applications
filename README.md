@@ -6,6 +6,31 @@ The dev-prod split is managed using the dev/kustomize.yaml v.s. prod/kustomize.y
 
 **NOTE:** Because the kustomization files require `../` you need to use `kustomize --load-restrictor LoadRestrictionsNone`.
 
+## Use this to bootstrap AAW instances
+
+Either deploy this manually, via terraform, or with whatever your "bootstrapping" process is for the cluster.
+
+```yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: aaw-manifests
+  namespace: argocd
+spec:
+  destination:
+    name: in-cluster
+    namespace: daaas-system
+  project: default
+  source:
+    repoURL: https://github.com/StatCan/aaw-argocd-applications
+    # change this to `prod` to deploy prod instead 
+    path: dev
+    targetRevision: master
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+```
 
 ## Example
 
